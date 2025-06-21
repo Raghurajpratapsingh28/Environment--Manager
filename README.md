@@ -34,6 +34,44 @@ Support for both .env and JSON file formats with proper parsing and formatting.
 - Node.js (version 16 or higher)
 - npm or yarn package manager
 
+### Windows-Specific Setup
+
+**For Windows users, follow these additional steps:**
+
+1. **Install Node.js for Windows**
+   - Download from [nodejs.org](https://nodejs.org/)
+   - Choose the LTS version for better stability
+   - Run the installer as Administrator if you encounter permission issues
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Run the application**
+   ```bash
+   # Option 1: Using npm
+   npm start
+   
+   # Option 2: Using the Windows batch file
+   run-windows.bat
+   ```
+
+4. **Building for Windows**
+   ```bash
+   # Build installer (.exe)
+   npm run build:win
+   
+   # Build portable version
+   npm run build:win-portable
+   ```
+
+**Windows Troubleshooting:**
+- If you get "node is not recognized" error, restart your command prompt after installing Node.js
+- If you get permission errors, run Command Prompt as Administrator
+- If the app doesn't start, check Windows Defender or antivirus software isn't blocking it
+- For build issues, ensure you have Visual Studio Build Tools installed
+
 ### Development Setup
 
 1. **Clone or download the project files**

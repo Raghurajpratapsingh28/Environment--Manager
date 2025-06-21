@@ -22,9 +22,13 @@ class EnvironmentManager {
         preload: path.join(__dirname, 'preload.js'),
         enableRemoteModule: false
       },
-      icon: path.join(__dirname, 'assets', 'icon.png'),
-      titleBarStyle: 'default',
-      show: false
+      titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default',
+      show: false,
+      // Windows-specific settings
+      ...(process.platform === 'win32' && {
+        frame: true,
+        autoHideMenuBar: false
+      })
     });
 
     this.mainWindow.loadFile('index.html');
@@ -46,7 +50,9 @@ class EnvironmentManager {
     try {
       await fs.access(this.envDir);
     } catch (error) {
-      await fs.mkdir(this.envDir, { recursive: true });
+      // Ensure the directory path is valid for Windows
+      const normalizedPath = path.normalize(this.envDir);
+      await fs.mkdir(normalizedPath, { recursive: true });
     }
     
     await this.ensureFolderExists(this.currentFolder);
@@ -57,7 +63,9 @@ class EnvironmentManager {
     try {
       await fs.access(folderPath);
     } catch (error) {
-      await fs.mkdir(folderPath, { recursive: true });
+      // Ensure the directory path is valid for Windows
+      const normalizedPath = path.normalize(folderPath);
+      await fs.mkdir(normalizedPath, { recursive: true });
     }
   }
 
