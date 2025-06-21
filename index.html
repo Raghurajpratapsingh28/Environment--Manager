@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raghuraj ENV Manager</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-cogs"></i>Environment Manager</h1>
+            <p>Manage your local environment variables with .env file support</p>
+        </header>
+
+        <main class="main-content">
+
+            <div class="folder-section">
+                <div class="folder-header">
+                    <h3><i class="fas fa-folder"></i> Project Environment</h3>
+                    <button id="createFolderBtn" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-plus"></i>
+                        New Folder
+                    </button>
+                </div>
+                <div class="folder-selector">
+                    <select id="folderSelect" class="folder-select">
+                        <option value="default">Default</option>
+                    </select>
+                    <button id="deleteFolderBtn" class="btn btn-danger btn-sm" title="Delete current folder">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <button id="addVarBtn" class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Add Variable
+                </button>
+                <button id="importBtn" class="btn btn-secondary">
+                    <i class="fas fa-download"></i>
+                    Import .env
+                </button>
+                <button id="exportBtn" class="btn btn-secondary">
+                    <i class="fas fa-upload"></i>
+                    Export .env
+                </button>
+            </div>
+
+            <div class="info-panel">
+                <div class="info-item">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Import/Export supports both .env and JSON formats</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-key"></i>
+                    <span>Multiple environment variables can be managed in one file</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-folder"></i>
+                    <span>Use folders to organize different project environments</span>
+                </div>
+            </div>
+
+            <div class="env-list-container">
+                <div id="envList" class="env-list">
+                   
+                </div>
+            </div>
+
+            <div id="emptyState" class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+                <h3>No Environment Variables</h3>
+                <p>Get started by adding your first environment variable or importing a .env file</p>
+            </div>
+        </main>
+
+    
+        <div id="varModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">
+                        <i class="fas fa-plus"></i>
+                        Add Environment Variable
+                    </h2>
+                    <button id="closeModal" class="close-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="varForm">
+                        <div class="form-group">
+                            <label for="varKey">
+                                <i class="fas fa-key"></i>
+                                Variable Name:
+                            </label>
+                            <input type="text" id="varKey" name="key" required placeholder="e.g., API_KEY, DATABASE_URL">
+                        </div>
+                        <div class="form-group">
+                            <label for="varValue">
+                                <i class="fas fa-code"></i>
+                                Value:
+                            </label>
+                            <textarea id="varValue" name="value" rows="3" placeholder="Enter the environment variable value"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" id="cancelBtn" class="btn btn-secondary">
+                                <i class="fas fa-times"></i>
+                                Cancel
+                            </button>
+                            <button type="submit" id="saveBtn" class="btn btn-primary">
+                                <i class="fas fa-save"></i>
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    
+        <div id="folderModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>
+                        <i class="fas fa-folder-plus"></i>
+                        Create New Folder
+                    </h2>
+                    <button id="closeFolderModal" class="close-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="folderForm">
+                        <div class="form-group">
+                            <label for="folderName">
+                                <i class="fas fa-folder"></i>
+                                Folder Name:
+                            </label>
+                            <input type="text" id="folderName" name="folderName" required placeholder="e.g., devs0, production, staging">
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" id="cancelFolderBtn" class="btn btn-secondary">
+                                <i class="fas fa-times"></i>
+                                Cancel
+                            </button>
+                            <button type="submit" id="saveFolderBtn" class="btn btn-primary">
+                                <i class="fas fa-save"></i>
+                                Create Folder
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        
+        <div id="confirmModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Confirm Action
+                    </h2>
+                    <button id="closeConfirmModal" class="close-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmMessage">Are you sure you want to perform this action?</p>
+                    <div class="form-actions">
+                        <button id="cancelConfirmBtn" class="btn btn-secondary">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </button>
+                        <button id="confirmBtn" class="btn btn-danger">
+                            <i class="fas fa-trash"></i>
+                            Confirm
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html> 
