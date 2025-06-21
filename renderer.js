@@ -1,5 +1,3 @@
-
-
 class EnvironmentUI {
     constructor() {
         this.currentEditingKey = null;
@@ -36,6 +34,7 @@ class EnvironmentUI {
         this.cancelConfirmBtn = document.getElementById('cancelConfirmBtn');
         
         this.addVarBtn = document.getElementById('addVarBtn');
+        this.copyAllBtn = document.getElementById('copyAllBtn');
         this.importBtn = document.getElementById('importBtn');
         this.exportBtn = document.getElementById('exportBtn');
         
@@ -83,6 +82,7 @@ class EnvironmentUI {
         this.varForm.addEventListener('submit', this.handleFormSubmit.bind(this));
 
         this.addVarBtn.addEventListener('click', this.showAddModal.bind(this));
+        this.copyAllBtn.addEventListener('click', this.handleCopyAll.bind(this));
         this.closeModal.addEventListener('click', this.hideModal.bind(this));
         this.cancelBtn.addEventListener('click', this.hideModal.bind(this));
         
@@ -546,6 +546,36 @@ class EnvironmentUI {
         } catch (error) {
             console.error('Copy failed:', error);
             return { error: 'Failed to copy to clipboard' };
+        }
+    }
+
+    /**
+     * Handle copy all variables
+     */
+    async handleCopyAll() {
+        try {
+            if (Object.keys(this.envVars).length === 0) {
+                this.showNotification('No environment variables to copy', 'warning');
+                return;
+            }
+
+            // Format all variables as keyName = value (with spaces around equals)
+            const formattedVars = Object.entries(this.envVars)
+                .map(([key, value]) => `${key} = ${value}`)
+                .join('\n');
+
+            const result = await this.copyToClipboard(formattedVars);
+            
+            if (result.error) {
+                this.showNotification(result.error, 'error');
+            } else {
+                const count = Object.keys(this.envVars).length;
+                this.showNotification(`Copied ${count} environment variables to clipboard`, 'success');
+            }
+            
+        } catch (error) {
+            this.showNotification('Failed to copy environment variables', 'error');
+            console.error('Copy all error:', error);
         }
     }
 
