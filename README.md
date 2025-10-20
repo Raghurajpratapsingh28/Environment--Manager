@@ -7,7 +7,7 @@ A beautiful and intuitive desktop application built with Electron.js for managin
 ## Features
 
 - ✨ **Modern UI**: Clean, responsive design with beautiful animations
-- 🔒 **Local Storage**: All data stored securely in local JSON files
+- 🔒 **Local Storage**: All data stored securely in local JSON files   
 - 📝 **Full CRUD Operations**: Create, Read, Update, and Delete environment variables
 - 🔍 **Search & Filter**: Quickly find variables with real-time search
 - 📤 **Import/Export**: Backup and restore your environment variables in .env or JSON format
